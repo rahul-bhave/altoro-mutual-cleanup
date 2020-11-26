@@ -16,4 +16,4 @@ jobs:
           pip install -r requirements.txt
       # Execute Test for altoro mutual
       - name: Run test for altoro mutual
-        run: python tests/test_altoro_mutual_form.py
+        run: python -m pytest tests/test_altoro_mutual_form.py --browser headless-chrome
