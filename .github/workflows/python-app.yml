@@ -9,7 +9,6 @@ jobs:
       - name: Install Python 3
         uses: actions/setup-python@v1
         with:
-          chromedriver-version: '80.0.3987.106'
           python-version: 3.8
       - name: Install dependencies
         run: |
