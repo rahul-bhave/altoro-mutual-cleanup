@@ -1,36 +1,22 @@
-name: "Testing setup"
+name: Run Python Tests on altoro mutual repository
 on:
   push:
-    branches:
-      - '*'
-    tags:
-      - '*'
-    paths:
-      - '**'
-      - '!*.md'
-  pull_request:
-    branches:
-      - '*'
-    paths:
-      - '**'
-      - '!*.md'
 jobs:
-  test_default_version:
+  build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-      with:
-        python-version: 3.8
-    - run: npm ci
-    - run: npm run build
-    - run: npm test
-    - uses: ./
-    - name: setup
-      run: |
-        google-chrome --version
-        sudo pip3 install selenium
-        export DISPLAY=:99
-        chromedriver --url-base=/wd/hub &
-        sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # disable headless mode
-        pip install -r requirements.txt
-        python tests/test_altoro_mutual_form.py
+      - uses: actions/checkout@v2
+      - name: Install Python 3
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+      - name: Install dependencies
+        run: |
+          set -ex
+          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo apt install ./google-chrome-stable_current_amd64.deb
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      # Execute Test for altoro mutual
+      - name: Run test for altoro mutual
+        run: python -m pytest tests/test_altoro_mutual_form.py --browser headless-chrome
